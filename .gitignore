@@ -1,0 +1,25 @@
+# C++ files
+*.o
+*.obj
+*.exe
+*.out
+*.log
+*.gch
+
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.env/
+.venv/
+env/
+venv/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE/editor settings
+.vscode/
+.idea/
