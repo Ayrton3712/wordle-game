@@ -1,9 +1,11 @@
 #ifndef WORD_COMPARISON_H
 #define WORD_COMPARISON_H
 
+#include <vector>
+
 class WordComparison{
     public:
-        vector<int> evaluateGuess(const string&);
+        std::vector<int> evaluateGuess(const string&);
 };
 
 #endif

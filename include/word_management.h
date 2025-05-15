@@ -4,18 +4,16 @@
 #include <string>           // To use strings
 #include <unordered_set>    // To use unordered_set
 
-using namespace std;
-
 class WordManager{
 private:
-    unordered_set<string> validWords;
+    std::unordered_set<string> validWords;
 
 public:
     bool loadValidWords(); // Loads valid 5-letter words from a file
 
-    bool isValidWord(const string& word); // Checks if a word is in the set
+    bool isValidWord(const std::string& word); // Checks if a word is in the set
 
-    string chooseTargetWord(); // Chooses a random word from the set
+    std::string chooseTargetWord(); // Chooses a random word from the set
 };
 
 #endif
