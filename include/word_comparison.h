@@ -2,10 +2,8 @@
 #define WORD_COMPARISON_H
 
 #include <vector>
+#include <string>
 
-class WordComparator{
-    public:
-        std::vector<int> evaluateGuess(const string&);
-};
+std::vector<int> evaluateGuess(const string&);
 
 #endif
