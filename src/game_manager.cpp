@@ -4,8 +4,8 @@
 #include <limits>                        // For input stream handling
 
 #include "../include/game_manager.h"	 // Contains class declaration
-#include "../include/word_comparison.h"  // Custom header
-#include "../include/display.h"          // Custom header
+#include "../include/word_comparison.h"  // To use evaluateGuess
+#include "../include/word_management.h" // To use the WordManager class
 
 using namespace std;
 
@@ -29,25 +29,35 @@ string GameManager::getUserGuess() {
 }
 
 void GameManager::gameLoop() {
+    WordManager manager;
+    if (!manager.loadValidWords()) {
+        std::cerr << "Could not load word list.\n";
+        return;
+    }
+
+    std::string target = manager.chooseTargetWord();
+
     for (int i = 0; i < 6; i++) {
-        cout << "\nAttempt " << (i + 1) << " of 6" << endl;
+        std::cout << "\nAttempt " << (i + 1) << " of 6" << std::endl;
 
-        string guess = getUserGuess();
-        vector<int> evaluation = evaluateGuess(guess); // Assume this takes a guess and returns feedback
+        std::string guess = getUserGuess();
+        std::vector<int> evaluation = evaluateGuess(guess, target);
 
-        displayFeedback(); // You'll probably want to pass guess & evaluation here for a real display
+        // GUI will use this later
+        // displayFeedback(guess, evaluation);
 
-        if (evaluation == vector<int>{2, 2, 2, 2, 2}) {
-            cout << "You have won the game!" << endl;
+        if (evaluation == std::vector<int>{2, 2, 2, 2, 2}) {
+            std::cout << "You have won the game!" << std::endl;
             return;
         }
     }
-    cout << "You are out of tries! Try again? (Y/N): ";
+
+    std::cout << "You are out of tries! Try again? (Y/N): ";
     char choice;
-    cin >> choice;
+    std::cin >> choice;
     if (choice == 'Y' || choice == 'y') {
         gameLoop();
     } else {
-        cout << "Thanks for playing!" << endl;
+        std::cout << "Thanks for playing!" << std::endl;
     }
 }
