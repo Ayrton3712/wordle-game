@@ -54,8 +54,8 @@ string WordManager::chooseTargetWord()  {
     return words[index]; // Returning the word at index
 }
 
-// main function to test the WordManager class
-/*int main(){
+/*// main function to test the WordManager class
+int main(){
     WordManager manager;
     
     if (!manager.loadValidWords()){

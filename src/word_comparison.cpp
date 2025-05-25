@@ -40,7 +40,7 @@ vector<int> evaluateGuess(const string& guess) {
     return feedback;
 }
 
-// main function to test evaluateGuess
+/*// main function to test evaluateGuess
 int main(){ 
     string guess = "crane";
 
@@ -51,4 +51,4 @@ int main(){
     }
 
     return 0;
-}
+}*/
