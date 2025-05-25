@@ -4,11 +4,11 @@
 #include <string>
 
 class GameManager{
-	public:
-		void gameLoop();
-
 	private:
 		std::string getUserGuess();
+	
+	public:
+		void gameLoop();
 };
 
 #endif
