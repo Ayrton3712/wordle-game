@@ -7,18 +7,17 @@
 
 using namespace std;
 
-vector<int> evaluateGuess(const string& guess) {
+vector<int> evaluateGuess(const string& guess, const string& target) {
     const int GREEN = 2; // Code for Green: correct letter, correct position
     const int YELLOW = 1; // Code for Yellow: correct letter, wrong position
     const int GRAY = 0; // Code for Gray: wrong letter
 
-    string targetWord = "apple"; // Change later for full integration
     vector<int> feedback(5, GRAY); // Default all to GRAY
     vector<bool> usedInTarget(5, false); // Track matched letters in target
 
     // First pass: Mark GREEN
     for (int i = 0; i < 5; ++i) {
-        if (guess[i] == targetWord[i]) {
+        if (guess[i] == target[i]) {
             feedback[i] = GREEN;
             usedInTarget[i] = true;
         }
@@ -29,7 +28,7 @@ vector<int> evaluateGuess(const string& guess) {
         if (feedback[i] == GREEN) continue;
 
         for (int j = 0; j < 5; ++j) {
-            if (!usedInTarget[j] && guess[i] == targetWord[j]) {
+            if (!usedInTarget[j] && guess[i] == target[j]) {
                 feedback[i] = YELLOW;
                 usedInTarget[j] = true;
                 break;
