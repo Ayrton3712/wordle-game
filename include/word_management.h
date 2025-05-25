@@ -6,7 +6,7 @@
 
 class WordManager{
 private:
-    std::unordered_set<string> validWords;
+    std::unordered_set<std::string> validWords;
 
 public:
     bool loadValidWords(); // Loads valid 5-letter words from a file
