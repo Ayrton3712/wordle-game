@@ -4,6 +4,6 @@
 #include <vector>
 #include <string>
 
-std::vector<int> evaluateGuess(const string&);
+std::vector<int> evaluateGuess(const std::string&);
 
 #endif
