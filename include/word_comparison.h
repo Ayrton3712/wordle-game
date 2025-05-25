@@ -3,7 +3,7 @@
 
 #include <vector>
 
-class WordComparison{
+class WordComparator{
     public:
         std::vector<int> evaluateGuess(const string&);
 };
