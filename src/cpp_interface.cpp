@@ -4,7 +4,7 @@
 #include "../include/word_comparison.h"
 #include "../include/word_management.h"
 
-int main() {
+int main(){
     std::string guess;
     std::string target;
 
