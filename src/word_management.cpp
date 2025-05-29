@@ -41,7 +41,7 @@ bool WordManager::isValidWord(const string& word){
     return validWords.find(word) != validWords.end();
 }
 
-string WordManager::chooseTargetWord()  {
+string WordManager::chooseTargetWord(){
     // Convert unordered_set to vector for indexing
     vector<string> words(validWords.begin(), validWords.end());
 
