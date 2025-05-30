@@ -7,6 +7,7 @@ import os
 ROWS = 6
 COLS = 5
 # hola test
+# test edna
 # Get the directory of this script (gui/)
 SCRIPT_DIR = os.path.dirname(__file__)
 WORDS_PATH = os.path.join(SCRIPT_DIR, "../words.txt")
