@@ -6,8 +6,6 @@ import os
 
 ROWS = 6
 COLS = 5
-# hola test
-# test edna
 # Get the directory of this script (gui/)
 SCRIPT_DIR = os.path.dirname(__file__)
 WORDS_PATH = os.path.join(SCRIPT_DIR, "../words.txt")
@@ -29,6 +27,7 @@ class WordleGUI:
 
         self.setup_grid()
         self.setup_input()
+        self.play_again_btn = None
 
     def setup_grid(self):
         for row in range(ROWS):
@@ -73,11 +72,10 @@ class WordleGUI:
         self.current_row += 1
 
         if feedback == [2, 2, 2, 2, 2]:
-            messagebox.showinfo("Congratulations!", "You guessed the word!")
-            self.root.quit()
+            self.play_again_prompt("Congratulations! You guessed the word!")
         elif self.current_row >= ROWS:
-            messagebox.showinfo("Game Over", f"Out of attempts! The word was: {TARGET_WORD}")
-            self.root.quit()
+            self.play_again_prompt(f"Out of attempts! The word was: {TARGET_WORD}")
+
 
     def get_feedback_from_cpp(self, guess, target):
         try:
@@ -101,6 +99,26 @@ class WordleGUI:
         except Exception as e:
             print("Error running subprocess:", e)
             return None
+        
+    def reset_game(self):
+        global TARGET_WORD
+        TARGET_WORD = random.choice(VALID_WORDS)
+        self.current_row = 0
+        self.entry.config(state=tk.NORMAL)
+        self.entry.delete(0, tk.END)
+        self.play_again_btn.grid_forget()
+
+        for row in self.grid:
+            for label in row:
+                label.config(text="", bg=self.root.cget('bg'), fg="black")
+
+    def play_again_prompt(self, message):
+        messagebox.showinfo("Game Over", message)
+        self.entry.config(state=tk.DISABLED)
+        self.play_again_btn = tk.Button(self.root, text="Play Again", command=self.reset_game, font=("Helvetica", 14))
+        self.play_again_btn.grid(row=ROWS + 1, column=0, columnspan=COLS, pady=10)
+
+
 
 if __name__ == "__main__":
     root = tk.Tk()
