@@ -12,15 +12,21 @@ int main() {
         return 1;
     }
 
+    std::string guess;
     std::string target = manager.chooseTargetWord();
     int attempts = 0;
     const int max_attempts = 6;
 
-    while (attempts < max_attempts) {
-        std::string guess;
+    while (true) {
         std::getline(std::cin, guess);
 
-        // Clean input
+        if (guess == "EXIT") break;
+        if (guess == "RESET") {
+            target = manager.chooseTargetWord();
+            attempts = 0;
+            continue;
+        }
+
         std::transform(guess.begin(), guess.end(), guess.begin(), ::tolower);
 
         if (guess.length() != 5) {
@@ -28,33 +34,19 @@ int main() {
             continue;
         }
 
-        if (!manager.isValidWord(guess)) {
-            std::cout << "00000" << std::endl;  // All gray
-            attempts++;  // ✅ Count the guess
-            if (attempts == max_attempts) {
-                std::cout << "LOSE:" << target << std::endl;
-            }
-            continue;
-        }
-
         std::vector<int> result = evaluateGuess(guess, target);
 
-        // Output feedback digits as string
-        for (int val : result) {
-            std::cout << val;
-        }
+        for (int val : result) std::cout << val;
         std::cout << std::endl;
 
         if (result == std::vector<int>{2, 2, 2, 2, 2}) {
             std::cout << "WIN" << std::endl;
-            break;
+            continue;
         }
 
         attempts++;
-
         if (attempts == max_attempts) {
             std::cout << "LOSE:" << target << std::endl;
-            break;
         }
     }
 
