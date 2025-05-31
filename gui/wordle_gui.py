@@ -1,22 +1,14 @@
 import tkinter as tk
 from tkinter import messagebox
 import subprocess
-import random
 import os
 
 ROWS = 6
 COLS = 5
+
 # Get the directory of this script (gui/)
 SCRIPT_DIR = os.path.dirname(__file__)
-WORDS_PATH = os.path.join(SCRIPT_DIR, "../words.txt")
 CPP_EXEC_PATH = os.path.join(SCRIPT_DIR, "../wordle_cpp_bridge.exe")
-
-# Load valid words from words.txt
-with open(WORDS_PATH, "r") as f:
-    VALID_WORDS = [word.strip().lower() for word in f if len(word.strip()) == 5]
-
-# Randomly choose a target word
-TARGET_WORD = random.choice(VALID_WORDS)
 
 class WordleGUI:
     def __init__(self, root):
@@ -24,10 +16,13 @@ class WordleGUI:
         self.root.title("Wordle GUI")
         self.grid = []
         self.current_row = 0
+        self.play_again_btn = None
 
         self.setup_grid()
         self.setup_input()
-        self.play_again_btn = None
+        self.cpp_process = subprocess.Popen([
+            CPP_EXEC_PATH
+        ], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
     def setup_grid(self):
         for row in range(ROWS):
@@ -53,56 +48,46 @@ class WordleGUI:
             messagebox.showerror("Error", "Please enter a 5-letter word.")
             return
 
-        feedback = self.get_feedback_from_cpp(guess, TARGET_WORD)
-        if feedback is None:
-            messagebox.showerror("Error", "Something went wrong with the C++ logic.")
-            return
-
-        for i, val in enumerate(feedback):
-            label = self.grid[self.current_row][i]
-            label.config(text=guess[i].upper())
-            if val == 2:
-                label.config(bg="green", fg="white")
-            elif val == 1:
-                label.config(bg="yellow", fg="black")
-            else:
-                label.config(bg="gray", fg="white")
-
-        self.entry.delete(0, tk.END)
-        self.current_row += 1
-
-        if feedback == [2, 2, 2, 2, 2]:
-            self.play_again_prompt("Congratulations! You guessed the word!")
-        elif self.current_row >= ROWS:
-            self.play_again_prompt(f"Out of attempts! The word was: {TARGET_WORD}")
-
-
-    def get_feedback_from_cpp(self, guess, target):
         try:
-            process = subprocess.Popen([
-                CPP_EXEC_PATH
-            ],
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True)
+            self.cpp_process.stdin.write(guess + "\n")
+            self.cpp_process.stdin.flush()
 
-            input_data = f"{guess} {target}\n"
-            stdout, stderr = process.communicate(input=input_data)
+            feedback_line = self.cpp_process.stdout.readline().strip()
 
-            if stderr:
-                print("C++ Error:", stderr)
-                return None
+            if feedback_line.startswith("ERROR"):
+                if "INVALID_WORD" in feedback_line:
+                    messagebox.showerror("Error", "That word is not in the list.")
+                elif "INVALID_LENGTH" in feedback_line:
+                    messagebox.showerror("Error", "Word must be 5 letters.")
+                return
 
-            return [int(c) for c in stdout.strip() if c.isdigit()]
+            if feedback_line == "WIN":
+                self.play_again_prompt("Congratulations! You guessed the word!")
+                return
+            elif feedback_line.startswith("LOSE"):
+                target = feedback_line.split(":")[1]
+                self.play_again_prompt(f"Out of attempts! The word was: {target}")
+                return
+
+            feedback = [int(c) for c in feedback_line if c.isdigit()]
+
+            for i, val in enumerate(feedback):
+                label = self.grid[self.current_row][i]
+                label.config(text=guess[i].upper())
+                if val == 2:
+                    label.config(bg="green", fg="white")
+                elif val == 1:
+                    label.config(bg="yellow", fg="black")
+                else:
+                    label.config(bg="gray", fg="white")
+
+            self.entry.delete(0, tk.END)
+            self.current_row += 1
 
         except Exception as e:
-            print("Error running subprocess:", e)
-            return None
-        
+            messagebox.showerror("Error", f"Subprocess communication failed: {e}")
+
     def reset_game(self):
-        global TARGET_WORD
-        TARGET_WORD = random.choice(VALID_WORDS)
         self.current_row = 0
         self.entry.config(state=tk.NORMAL)
         self.entry.delete(0, tk.END)
@@ -112,13 +97,17 @@ class WordleGUI:
             for label in row:
                 label.config(text="", bg=self.root.cget('bg'), fg="black")
 
+        # Restart subprocess
+        self.cpp_process.kill()
+        self.cpp_process = subprocess.Popen([
+            CPP_EXEC_PATH
+        ], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
     def play_again_prompt(self, message):
         messagebox.showinfo("Game Over", message)
         self.entry.config(state=tk.DISABLED)
         self.play_again_btn = tk.Button(self.root, text="Play Again", command=self.reset_game, font=("Helvetica", 14))
         self.play_again_btn.grid(row=ROWS + 1, column=0, columnspan=COLS, pady=10)
-
-
 
 if __name__ == "__main__":
     root = tk.Tk()
