@@ -29,7 +29,11 @@ int main() {
         }
 
         if (!manager.isValidWord(guess)) {
-            std::cout << "ERROR:INVALID_WORD" << std::endl;
+            std::cout << "00000" << std::endl;  // All gray
+            attempts++;  // ✅ Count the guess
+            if (attempts == max_attempts) {
+                std::cout << "LOSE:" << target << std::endl;
+            }
             continue;
         }
 
