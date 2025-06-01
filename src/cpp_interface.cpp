@@ -28,6 +28,7 @@ int main() {
         }
 
         std::transform(guess.begin(), guess.end(), guess.begin(), ::tolower);
+        std::transform(target.begin(), target.end(), target.begin(), ::tolower);
 
         if (guess.length() != 5) {
             std::cout << "ERROR:INVALID_LENGTH" << std::endl;
@@ -41,12 +42,15 @@ int main() {
 
         if (result == std::vector<int>{2, 2, 2, 2, 2}) {
             std::cout << "WIN" << std::endl;
+            std::cout.flush();
             continue;
         }
 
         attempts++;
         if (attempts == max_attempts) {
             std::cout << "LOSE:" << target << std::endl;
+            std::cout.flush();
+            continue;
         }
     }
 

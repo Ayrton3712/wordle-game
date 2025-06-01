@@ -13,11 +13,12 @@ CPP_EXEC_PATH = os.path.join(SCRIPT_DIR, "../wordle_cpp_bridge.exe")
 class WordleGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("Wordle GUI")
+        self.root.title("Wordle")
         self.grid = []
         self.current_row = 0
         self.play_again_btn = None
         self.game_over = False
+        self.attempts = 0
 
         self.setup_grid()
         self.setup_input()
@@ -48,8 +49,8 @@ class WordleGUI:
         submit_btn.grid(row=ROWS, column=COLS-1, padx=5)
 
     def submit_guess(self):
-        if self.cpp_process.poll() is not None or self.game_over:
-            return  # Game already ended
+        if self.cpp_process.poll() is not None or self.game_over or self.attempts >= ROWS:
+            return
 
         guess = self.entry.get().lower()
         if len(guess) != 5:
@@ -60,37 +61,40 @@ class WordleGUI:
             self.cpp_process.stdin.write(guess + "\n")
             self.cpp_process.stdin.flush()
 
+            feedback = None
+            result_line = None
+
+            # Read multiple lines until WIN or LOSE is detected
             while True:
-                feedback_line = self.cpp_process.stdout.readline()
-                if not feedback_line:
-                    break
-                feedback_line = feedback_line.strip()
-                print("FROM CPP:", repr(feedback_line))  # Debug output
-                if feedback_line == "WIN" or feedback_line.startswith("LOSE") or all(c in "012" for c in feedback_line):
+                line = self.cpp_process.stdout.readline()
+                if not line:
                     break
 
-            if feedback_line == "WIN":
-                self.display_feedback(guess, [2]*5)
+                line = line.strip()
+                print("FROM CPP:", repr(line))
+
+                if all(c in "012" for c in line) and feedback is None:
+                    feedback = [int(c) for c in line]
+                elif line == "WIN" or line.startswith("LOSE"):
+                    result_line = line
+                    break
+
+            if feedback is not None:
+                self.display_feedback(guess, feedback)
+                self.entry.delete(0, tk.END)
+                self.current_row += 1
+                self.attempts += 1
+
+            if result_line == "WIN":
                 self.entry.config(state=tk.DISABLED)
                 self.show_play_again("Congratulations! You guessed the word!")
                 return
 
-            if feedback_line.startswith("LOSE"):
-                parts = feedback_line.split(":")
-                if len(parts) == 2:
-                    target = parts[1]
-                else:
-                    target = "?????"
-                self.display_feedback(guess, [0]*5)
+            if result_line and result_line.startswith("LOSE"):
+                target = result_line.split(":")[1] if ":" in result_line else "?????"
                 self.entry.config(state=tk.DISABLED)
                 self.show_play_again(f"Out of attempts! The word was: {target}")
                 return
-
-            feedback = [int(c) for c in feedback_line if c in "012"]
-            self.display_feedback(guess, feedback)
-
-            self.entry.delete(0, tk.END)
-            self.current_row += 1
 
         except Exception as e:
             messagebox.showerror("Error", f"Subprocess communication failed: {e}")
@@ -116,6 +120,7 @@ class WordleGUI:
 
     def reset_game(self):
         self.current_row = 0
+        self.attempts = 0
         self.game_over = False
         self.entry.config(state=tk.NORMAL)
         self.entry.delete(0, tk.END)
