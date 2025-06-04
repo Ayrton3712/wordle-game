@@ -16,6 +16,7 @@ class GameManager{
 			// resultTag = ""     -> normal turn
 			// resultTag = "WIN"  -> guessed it
 			// resultTag = "LOSE" -> out of tries
+		const std::string& getTarget() const;
 };
 
 #endif

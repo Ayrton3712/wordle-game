@@ -81,3 +81,8 @@ std::vector<int> GameManager::processGuess(const std::string& guess, std::string
 
     return feedback;
 }
+
+// Getter for the target
+const std::string& GameManager::getTarget() const{
+    return target;
+}
