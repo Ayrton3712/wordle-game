@@ -41,9 +41,6 @@ void GameManager::gameLoop() {
         std::string guess = getUserGuess();
         std::vector<int> evaluation = evaluateGuess(guess, target);
 
-        // GUI will use this later
-        // displayFeedback(guess, evaluation);
-
         if (evaluation == std::vector<int>{2, 2, 2, 2, 2}) {
             std::cout << "You have won the game!" << std::endl;
             return;
@@ -66,7 +63,7 @@ void GameManager::reset(const std::string& newTarget){
     attempts = 0;
 }
 
-// Processes the guess and encodes it into resultTag
+// Processes the guess, encodes it into resultTag, and returns feedback vector
 std::vector<int> GameManager::processGuess(const std::string& guess, std::string& resultTag){
     std::vector<int> feedback = evaluateGuess(guess, target);
     attempts++;
