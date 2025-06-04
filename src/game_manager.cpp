@@ -26,6 +26,40 @@ std::string GameManager::getUserGuess(){
     return guess;
 }
 
+void GameManager::gameLoop() {
+    WordManager manager;
+    if (!manager.loadValidWords()) {
+        std::cerr << "Could not load word list.\n";
+        return;
+    }
+
+    std::string target = manager.chooseTargetWord();
+
+    for (int i = 0; i < 6; i++) {
+        std::cout << "\nAttempt " << (i + 1) << " of 6" << std::endl;
+
+        std::string guess = getUserGuess();
+        std::vector<int> evaluation = evaluateGuess(guess, target);
+
+        // GUI will use this later
+        // displayFeedback(guess, evaluation);
+
+        if (evaluation == std::vector<int>{2, 2, 2, 2, 2}) {
+            std::cout << "You have won the game!" << std::endl;
+            return;
+        }
+    }
+
+    std::cout << "You are out of tries! Try again? (Y/N): ";
+    char choice;
+    std::cin >> choice;
+    if (choice == 'Y' || choice == 'y') {
+        gameLoop();
+    } else {
+        std::cout << "Thanks for playing!" << std::endl;
+    }
+}
+
 // Resets target and attempts
 void GameManager::reset(const std::string& newTarget){
     target = newTarget;
