@@ -43,6 +43,8 @@ int main() {
             std::cout << v;
             std::cout << "\n";
         }
+        std::cout << std::flush; // To ensure all 5 digits leave the pipe
+        std::cout << '\n';
 
         if(tag=="WIN"){
             std::cout << "WIN\n";
