@@ -41,7 +41,6 @@ int main() {
 
         for(int v : fb){
             std::cout << v;
-            std::cout << "\n";
         }
         std::cout << std::flush; // To ensure all 5 digits leave the pipe
         std::cout << '\n';
