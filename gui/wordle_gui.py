@@ -57,7 +57,11 @@ class WordleGUI:
             messagebox.showerror("Error","Enter 5 letters"); return
         self.entry.delete(0, tk.END)
 
-        line = self._send(guess)          # first response (digits / WIN / LOSE)
+        while True:
+            line = self._send(guess)
+            if len(line) == 5 and all(ch in "012" for ch in line):
+                break                       # got full feedback
+            # otherwise loop again (it might be a partial flush)
         if line.startswith("ERROR"):
             messagebox.showerror("Error", line); return
 
