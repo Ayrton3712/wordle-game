@@ -5,6 +5,8 @@
 *.out
 *.log
 *.gch
+*.lnk
+*.bat
 
 # Python cache and virtual environments
 __pycache__/
@@ -23,3 +25,4 @@ Thumbs.db
 # IDE/editor settings
 .vscode/
 .idea/
+.icon/
