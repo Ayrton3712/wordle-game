@@ -57,7 +57,7 @@ void GameManager::gameLoop() {
     }
 }
 
-// Resets target and attempts
+// Resets target and attempts for a new round
 void GameManager::reset(const std::string& newTarget){
     target = newTarget;
     attempts = 0;

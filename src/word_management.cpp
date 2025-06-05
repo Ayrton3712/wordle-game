@@ -32,7 +32,7 @@ bool WordManager::loadValidWords(){
         validWords.insert(word);
     }
 
-    // Closing the file and returnnig true for successful loading
+    // Closing the file and returning true for successful loading
     file.close();
     return true;
 }

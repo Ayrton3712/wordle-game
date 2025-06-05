@@ -24,7 +24,7 @@ class WordleGUI:
         self.root.protocol("WM_DELETE_WINDOW", self._on_close)
         self._center_window()
 
-        # ────────── show welcome instructions ──────────
+        # ---------- show welcome instructions ----------
         messagebox.showinfo(
             "Welcome to Wordle!",
             "You have to guess a five-letter word.\n\n"
@@ -35,19 +35,19 @@ class WordleGUI:
             "Good luck!"
         )
 
-    # ────────── C++ helpers ──────────
+    # ---------- C++ helpers ----------
     def _start_cpp(self):
-        self.cpp = subprocess.Popen([CPP_PATH],
-                                    text=True,
-                                    stdin=subprocess.PIPE,
-                                    stdout=subprocess.PIPE)
+        self.cpp = subprocess.Popen([CPP_PATH],                 # command line: wordle_cpp_bridge.exe
+                                    text=True,                  # text mode (str to str) instead of bytes
+                                    stdin=subprocess.PIPE,      # creates a pipe for input
+                                    stdout=subprocess.PIPE)     # creates a pipe for output
 
     def _send(self, line:str) -> str:
-        self.cpp.stdin.write(line + "\n")
-        self.cpp.stdin.flush()
-        return self.cpp.stdout.readline().strip()   # exactly 1 line
+        self.cpp.stdin.write(line + "\n")           # send command / guess
+        self.cpp.stdin.flush()                      # force it out
+        return self.cpp.stdout.readline().strip()   # wait for ONE reply
 
-    # ────────── build ui ──────────
+    # ---------- build ui ----------
     def _build_grid(self):
         for r in range(ROWS):
             row=[]
@@ -68,7 +68,7 @@ class WordleGUI:
                                     command=self.submit)
         self.submit_btn.grid(row=ROWS, column=COLS-1, padx=5)
 
-    # ────────── main turn ──────────
+    # ---------- main turn ----------
     def submit(self):
         if self.game_over: return
         guess = self.entry.get().lower()
@@ -102,7 +102,7 @@ class WordleGUI:
             tgt = status.split(":",1)[1]
             self._game_end(f"Out of attempts!\nThe word was: {tgt}")
 
-    # ────────── helpers ──────────
+    # ---------- helpers ----------
     def _paint_row(self, word, fb):
         for i,(ch,val) in enumerate(zip(word, fb)):
             lbl = self.grid_widgets[self.row][i]
@@ -144,7 +144,7 @@ class WordleGUI:
         self._send("RESET")
         self.entry.focus_set() # give focus to the field
 
-    # ────────── housekeeping ──────────
+    # ---------- housekeeping ----------
     def _on_close(self):
         try: self._send("EXIT")
         except: pass
@@ -157,7 +157,7 @@ class WordleGUI:
         x,y = (sw-w)//2, (sh-h)//2
         self.root.geometry(f"{w}x{h}+{x}+{y}")
 
-# ────────── launch ──────────
+# ---------- launch ----------
 if __name__ == "__main__":
     if not os.path.exists(CPP_PATH):
         sys.exit("Compile C++ bridge first.")

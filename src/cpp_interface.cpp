@@ -6,17 +6,6 @@
 #include "../include/word_management.h"
 #include "../include/word_comparison.h"
 
-// ───────────────────────────────────────────
-// Protocol  (one line per response)
-//
-// 01201          <- 5 digits of feedback
-// WIN            <- guess == target
-// LOSE:<word>    <- ran out of tries
-// ERROR:<reason> <- bad length, etc.
-// READY          <- after RESET, engine ready
-// (Engine never quits until it receives EXIT)
-// ───────────────────────────────────────────
-
 int main() {
     WordManager wm;
     if (!wm.loadValidWords()){
@@ -25,13 +14,15 @@ int main() {
     }
 
     GameManager gm;
-    gm.reset(wm.chooseTargetWord());
+    //gm.reset(wm.chooseTargetWord());
+    gm.reset("apple"); // Initial hardcoded apple target word
 
     std::string line;
     while (std::getline(std::cin, line)){
         if (line=="EXIT") break;
         if (line=="RESET"){
-            gm.reset(wm.chooseTargetWord());
+            //gm.reset(wm.chooseTargetWord());
+            gm.reset("apple"); // Hardcoded apple target word for every round
             std::cout<<"READY\n";
             continue;
         }
