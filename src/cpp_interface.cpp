@@ -1,12 +1,11 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include "../include/game_manager.h"
-#include "../include/word_management.h"
-#include "../include/word_comparison.h"
+#include <iostream>                     // std::cin, std::cout, std::flush
+#include <string>                       // std::string (lines, tags)
+#include <vector>                       // To use the vector returned by processGuess
 
-int main() {
+#include "../include/game_manager.h"    // GameManager helpers (reset / processGuess)
+#include "../include/word_management.h" // loadValidWords + chooseTargetWord
+
+int main(){
     WordManager wm;
     if (!wm.loadValidWords()){
         std::cout << "ERROR:init\n";
