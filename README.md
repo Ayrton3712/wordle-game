@@ -7,9 +7,9 @@ This project implements the game Wordle using C++ for the core game logic and Py
 - `include/`: Header files for sharing functions across modules
 - `gui/`: Python interface built with Tkinter
 
-## Modules (separated by branches)
-- `feature/word-management`: Samira
-- `feature/input-game-loop`: Ana
-- `feature/word-comparison`: Anto
-- `feature/display-output`: Edna
-- `feature/gui-tkinter`: Ayrton
+## Modules
+- `word_management`: Samira
+- `game_manager`: Ana
+- `word_comparison`: Anto
+- `cpp_interface` & `cpp_bridge`: Ayrton
+- `wordle_gui`: Edna
