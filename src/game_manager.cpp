@@ -69,6 +69,10 @@ std::vector<int> GameManager::processGuess(const std::string& guess, std::string
     attempts++;
     resultTag.clear(); // Clears the string
 
+    // resultTag = ""     -> normal turn
+    // resultTag = "WIN"  -> guessed it
+    // resultTag = "LOSE" -> out of tries
+
     if (feedback == std::vector<int>{2, 2, 2, 2, 2}){
         resultTag = "WIN";
     }
