@@ -48,10 +48,19 @@ class WordleGUI:
 
     # ---------- main turn ----------
     def submit(self):
-        if self.game_over: return
+        if self.game_over:
+            return
+        
         guess = self.entry.get().lower()
+        
         if len(guess) != 5:
-            messagebox.showerror("Error", "Enter 5 letters"); return
+            messagebox.showerror("Error", "Enter 5 letters")
+            return
+        
+        if not guess.isalpha():
+            messagebox.showerror("Error", "Only A-Z characters are allowed")
+            return
+
         self.entry.delete(0, tk.END)
 
         # 1. feedback digits
