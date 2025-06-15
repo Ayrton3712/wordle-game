@@ -13,15 +13,13 @@ int main(){
     }
 
     GameManager gm;
-    //gm.reset(wm.chooseTargetWord());
-    gm.reset("apple"); // Initial hardcoded apple target word
+    gm.reset(wm.chooseTargetWord());
 
     std::string line;
     while (std::getline(std::cin, line)){
         if (line=="EXIT") break;
         if (line=="RESET"){
-            //gm.reset(wm.chooseTargetWord());
-            gm.reset("apple"); // Hardcoded apple target word for every round
+            gm.reset(wm.chooseTargetWord());
             std::cout<<"READY\n";
             continue;
         }
