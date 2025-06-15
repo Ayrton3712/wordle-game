@@ -1,30 +1,31 @@
 import subprocess, os, sys, platform
 
 def resource_path(rel):
-    """Return absolute path to resource, for use with PyInstaller"""
-    if getattr(sys, 'frozen', False):             # running as exe
-        base = sys._MEIPASS                       # temp dir created by PyInstaller
+    if getattr(sys, 'frozen', False):
+        base = sys._MEIPASS           # temp dir for bundled files
     else:
-        base = os.path.dirname(__file__)          # folder of this .py
+        base = os.path.dirname(__file__)
     return os.path.abspath(os.path.join(base, rel))
 
 CPP_PATH = resource_path("wordle_cpp_bridge.exe")
+CPP_DIR  = os.path.dirname(CPP_PATH)
 
 class CppBridge:
     def __init__(self):
         if not os.path.exists(CPP_PATH):
             sys.exit(f"Bridge executable not found: {CPP_PATH}")
 
-        kw = {}
+        kwargs = {"cwd": CPP_DIR}      # <─ launch child *in* that folder
         if platform.system() == "Windows":
-            kw["creationflags"] = subprocess.CREATE_NO_WINDOW  # hide console
+            import subprocess as sp
+            kwargs["creationflags"] = sp.CREATE_NO_WINDOW
 
         self.proc = subprocess.Popen(
             [CPP_PATH],
             text=True,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
-            **kw
+            **kwargs
         )
 
     # -------- high-level protocol helpers --------
