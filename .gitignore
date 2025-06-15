@@ -28,3 +28,7 @@ Thumbs.db
 
 # Icon folder
 icon/
+
+# PyInstaller
+build/
+*.spec
