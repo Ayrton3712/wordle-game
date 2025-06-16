@@ -2,7 +2,7 @@
 import tkinter as tk
 from tkinter import messagebox
 import os, sys
-from cpp_bridge import CppBridge                     # <── NEW import
+from cpp_bridge import CppBridge
 
 ROWS, COLS = 6, 5
 
@@ -10,7 +10,7 @@ class WordleGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Wordle")
-        self.bridge = CppBridge()                     # start C++ engine
+        self.bridge = CppBridge() # start C++ engine
 
         # state
         self.grid_widgets = []
@@ -63,7 +63,7 @@ class WordleGUI:
 
         self.entry.delete(0, tk.END)
 
-        # 1. feedback digits
+        # feedback digits
         digits = self.bridge.send_guess(guess)
         if not (len(digits)==5 and all(ch in "012" for ch in digits)):
             messagebox.showerror("Error", f"Unexpected reply: {digits}"); return
@@ -72,7 +72,7 @@ class WordleGUI:
             self._paint_row(guess, [int(x) for x in digits])
             self.row += 1
 
-        # 2. only read status line if game over conditions met
+        # only read status line if game over conditions met
         status = ""
         if digits == "22222":
             status = self.bridge.read_status()      # WIN

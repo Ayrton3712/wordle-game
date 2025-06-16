@@ -2,7 +2,7 @@ import subprocess, os, sys, platform
 
 def resource_path(rel):
     if getattr(sys, 'frozen', False):
-        base = sys._MEIPASS           # temp dir for bundled files
+        base = sys._MEIPASS # temp dir for bundled files
     else:
         base = os.path.dirname(__file__)
     return os.path.abspath(os.path.join(base, rel))
@@ -15,7 +15,7 @@ class CppBridge:
         if not os.path.exists(CPP_PATH):
             sys.exit(f"Bridge executable not found: {CPP_PATH}")
 
-        kwargs = {"cwd": CPP_DIR}      # <─ launch child *in* that folder
+        kwargs = {"cwd": CPP_DIR}      # launch child *in* that folder
         if platform.system() == "Windows":
             import subprocess as sp
             kwargs["creationflags"] = sp.CREATE_NO_WINDOW
@@ -28,7 +28,7 @@ class CppBridge:
             **kwargs
         )
 
-    # -------- high-level protocol helpers --------
+    # -------- high-level helpers --------
     def send_guess(self, word:str) -> str:
         """Send a 5-letter guess - return feedback digits (always 5 chars)."""
         self._writeline(word)
@@ -40,7 +40,7 @@ class CppBridge:
 
     def reset_game(self):
         self._writeline("RESET")
-        _ = self._readline()      # consumes READY
+        _ = self._readline() # consumes READY
 
     def close(self):
         try:  self._writeline("EXIT")
