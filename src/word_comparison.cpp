@@ -10,9 +10,9 @@
 std::vector<int> evaluateGuess(const std::string& guess, const std::string& target) {
     const int GREEN = 2;    // Code for Green: correct letter, correct position
     const int YELLOW = 1;   // Code for Yellow: correct letter, wrong position
-    const int GRAY = 0;     // Code for Gray: wrong letter
+    const int RED = 0;     // Code for Red: wrong letter
 
-    std::vector<int> feedback(5, GRAY); // Creates a vector with 5 elements, all set to GRAY (0). This holds the feedback.
+    std::vector<int> feedback(5, RED); // Creates a vector with 5 elements, all set to RED (0). This holds the feedback.
     std::vector<bool> usedInTarget(5, false); // Keeps track of which letters in the target word have been used (matched) during comparison.
 
     // First pass: Verify all correct letters are in correct position (GREEN)
