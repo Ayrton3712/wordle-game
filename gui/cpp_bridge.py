@@ -10,9 +10,10 @@ import os, sys, platform    # To handle paths, program-exit, and OS detection
 # Returns an absolute path to rel for use with PyInstaller-generated .exe
 def resource_path(rel):
     if getattr(sys, 'frozen', False):       # PyInstaller sets sys.frozen = True
-        base = sys._MEIPASS                 # _MEIPASS: Temporary directory that holds bundled files
+        base = sys._MEIPASS                 # _MEIPASS: Temporary PyInstaller directory that holds bundled files
     else:
         base = os.path.dirname(__file__)    # Directory where this script resides
+        
     return os.path.abspath(os.path.join(base, rel)) # Returns the absolute path
 
 # Full path to the bundled C++ engine and its directory
