@@ -10,7 +10,8 @@ The application is packaged into a single Windows executable using PyInstaller.
 
 ## Screenshots
 
-
+![Main window](docs/01_Entry.png)
+![Winning a round](docs/04_Win_on_last_attempt.png)
 
 ## Architecture
 
@@ -66,6 +67,51 @@ Two prebuilt Windows executables are provided (in `dist/`). Both open the same g
 |   ├── wordle-demo.exe       # Demonstration build
 |   ├── wordle-random.exe     # Normal gameplay
 └── docs/                     # Screenshots
+```
+
+## Building from Source
+
+The prebuilt `.exe` files are Windows-only. On Linux or macOS, the Makefile can be used to compile from source.
+
+### Prerequisites
+
+- A C++17-capable compiler (`g++` or `clang++`)
+- Python 3.8 or newer
+- GNU Make
+
+### Build everything
+
+```bash
+make
+```
+
+This produces:
+- `wordle` (or `wordle.exe` on Windows) at the project root, the CLI version
+- `gui/wordle_cpp_bridge` (or `.exe`) alongside a copy of `words.txt`, the files the Python GUI needs at runtime
+
+### Play in the terminal (CLI mode)
+
+```bash
+./wordle
+```
+
+### Play with the GUI (from source)
+
+```bash
+make run-gui
+```
+
+or manually:
+
+```bash
+cd gui
+python3 wordle_gui.py
+```
+
+### Clean up build artifacts
+
+```bash
+make clean
 ```
 
 ## Modules & Contributors
