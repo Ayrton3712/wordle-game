@@ -36,7 +36,7 @@ All messages are single lines of ASCII text terminated by `\n`. The bridge flush
 | C++ -> Python | `READY` | Acknowledgment sent after processing a `RESET` |
 | C++ -> Python | `ERROR:init` | Sent if the word list could not be loaded at startup |
 
-# How to Play
+## How to Play
 
 Two prebuilt Windows executables are provided (in `dist/`). Both open the same graphical Wordle interface, they differ only in how the target word is chosen.
 
