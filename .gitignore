@@ -8,6 +8,10 @@
 *.lnk
 *.bat
 
+# Shipped executables
+!dist/wordle-random.exe
+!dist/wordle-demo.exe
+
 # Python cache and virtual environments
 __pycache__/
 *.py[cod]
