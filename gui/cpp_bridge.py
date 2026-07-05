@@ -17,7 +17,8 @@ def resource_path(rel):
     return os.path.abspath(os.path.join(base, rel)) # Returns the absolute path
 
 # Full path to the bundled C++ engine and its directory
-CPP_PATH = resource_path("wordle_cpp_bridge.exe")
+_exe_name = "wordle_cpp_bridge.exe" if sys.platform == "win32" else "wordle_cpp_bridge"
+CPP_PATH = resource_path(_exe_name)
 CPP_DIR  = os.path.dirname(CPP_PATH)
 
 # -----------------------------------------------
